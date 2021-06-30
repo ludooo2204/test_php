@@ -1,23 +1,43 @@
 <?php
+// header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+
+
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+header('Content-Type: application/json');
+$method = $_SERVER['REQUEST_METHOD'];
+if ($method == "OPTIONS") {
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+header("HTTP/1.1 200 OK");
+die();
+}
+
 // Connect to database
 include("db_connect.php");
+// header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
 $request_method = $_SERVER["REQUEST_METHOD"];
 
-// function getItems()
-// {
-// 	global $conn;
-// 	$query = "SELECT * FROM mock_data";
-// 	$response = array();
-// 	$result = mysqli_query($conn, $query);
-// 	while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
-// 	{
-// 		$response[] = $row;
-// 	}
-// 	header('Content-Type: application/json');
-// 	echo json_encode($response, JSON_PRETTY_PRINT);
-// }
+function getItems()
+{
+	global $conn;
+	$query = "SELECT * FROM mock_data";
+	$response = array();
+	$result = mysqli_query($conn, $query);
+        //   echo 'lolo3';
+          
+	while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
+	{
+		$response[] = $row;
+	}
+	header('Content-Type: application/json');
+	echo json_encode($response, JSON_PRETTY_PRINT);
+}
 
-function getItems($id = 0)
+function getItem($id = 0)
 {
 	global $conn;
 	$query = "SELECT * FROM mock_data";
@@ -38,7 +58,7 @@ function AddItem()
 	global $conn;
 	$json = file_get_contents(('php://input'));
 	$object = json_decode($json);
-	// echo ($json);
+	echo ($json);
 
 
 
@@ -119,7 +139,7 @@ switch ($request_method) {
 		// Retrive Products
 		if (!empty($_GET["id"])) {
 			$id = intval($_GET["id"]);
-			getItems($id);
+			getItem($id);
 		} else {
 			getItems();
 		}

@@ -5,36 +5,41 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>test PHP et BDD</title>
-		<script src="ajax.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js" integrity="sha512-otOZr2EcknK9a5aa3BbMR9XOjYKtxxscwyRHN6zmdXuRfJ5uApkHB7cz1laWk2g8RKLzV9qv/fl3RPwfCuoxHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="ajax.js"></script>
+		<link rel="stylesheet" href="app.css">
 	</head>
 	<body>
+		<h1> Manipulation d'une base de données !</h1>
+		<p>
+			
+			apres des essais avec symfony (trop complexes sans de solides bases PHP) et mysqli (trop spécifique a mysql), je choisi d'utiliser l'objet PDO de PHP.
+			Il permet de se connecter a une base de donnnées
+		</p>
+		<p>
+			pour les problemes de CORS, il faut autoriser le serveur a accepter les requetes d'autres serveur (* pour tout )
+			<br>
+			<code>
+				header('Access-Control-Allow-Origin: *');<br>
+				header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");<br>
+				header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");<br>
+				header('Content-Type: application/json');<br>
+				$method = $_SERVER['REQUEST_METHOD'];<br>
+				if ($method == "OPTIONS") {<br>
+				header('Access-Control-Allow-Origin: *');<br>
+				header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");<br>
+				header("HTTP/1.1 200 OK");<br>
+				die();<br>
+				}</code>
+		</p>
 		<button onclick="test()">get</button>
 		<button onclick="testPost()">post</button>
-		<script>
-			const traitementReponse = (e) => {
-				console.log(e);
-			};
-			const id = "";
-			const test = () => {
-				axios.get(`/test_php/api/test_php/${id}`)
-				.then(e=>console.log(e.data))
-				// ajaxGet(`/test_php/api/test_php/${id}`, traitementReponse);
-			};
-
-			         const newPersonne = {
-			     "first_name": "oliver2",
-			     "last_name": "jouet",
-			     "email": "test@trescal.com",
-			     "company": "trescal",
-			     "createdAt": "2021-04-11"
-			    //  "modifiedAt": "2021-05-17"
-			 };
-			// url, data, callback, isJson
-			const testPost = () => {
-				ajaxPost(`/test_php/api/test_php`,newPersonne, traitementReponse,true);
-				// ajaxPost(`/test_php/api/testpost.php`,newPersonne, traitementReponse,true);
-			};
-		</script>
+		<button onclick="testGetPdo()">get avec PDO</button>
+		<button onclick="testPostPdo()">post avec PDO</button>
+		<button onclick="testGetPdoAvecParametre(1012)">get avec parametres avec PDO</button>
+		<input type="number" placeholder="id a entrer" id="tete"></input>
+		<div id="debug"></div>
+		
 	</body>
+	<script src="script.js"></script>
 </html>
